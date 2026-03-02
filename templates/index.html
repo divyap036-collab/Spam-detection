@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Spam Detector</title>
+    <title>Spam Detection</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,13 +23,14 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-        .form-container input[type="submit"] {
+        .form-container button[type="submit"] {
             background-color: #4CAF50;
-            color: white;
             border: none;
         }
-        .form-container input[type="submit"]:hover {
+        .form-container button[type="submit"]:hover {
             background-color: #45a049;
+            color: #b64343;
+            size : 1dvi;
         }
         .result {
             font-size: 1.5em;
@@ -40,17 +41,18 @@
     </style>
 </head>
 <body>
-    <div class="form-container">
-    <h2>Spam Message Detection</h2>
-    <form method="POST" action="/">
-    <textarea name="message" rows="4" cols="50" placeholder="Enter your message here"></textarea><br><br>
-    <input type="submit" value="Check">
-   </form>
-    {% if prediction is not none %}
-        <h3>Prediction: {{ prediction }}</h3>
-    {% endif %}
-     
-</div>
+ <div class="form-container">
+        <h2>Spam Detection Web App</h2>
+        <form method="POST">
+            <textarea name="message" placeholder="Enter your message here..."></textarea>
+            <br>
+            <button type="submit">Predict</button>
+        </form>
+        {% if prediction %}
+            <div class="result">Result: {{ prediction }}</div>
+        {% endif %}
+
+    </div>
+
 </body>
 </html>
-

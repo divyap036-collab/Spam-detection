@@ -1,5 +1,6 @@
-# app.py
 
+
+    # ...existing code...
 from flask import Flask, request, jsonify, render_template, render_template_string
 import nltk
 import os
@@ -11,37 +12,24 @@ import string
                      
 ps = PorterStemmer() 
 
-#new lines
-
-
-
+# NLTK data folder next to this file
 nltk_data_dir = os.path.join(os.path.dirname(__file__), "nltk_data")
 os.makedirs(nltk_data_dir, exist_ok=True)
-nltk.data.path.append(nltk_data_dir)
+if nltk_data_dir not in nltk.data.path:
+    nltk.data.path.append(nltk_data_dir)
 
-nltk.download('punkt', download_dir=nltk_data_dir)
-nltk.download('stopwords', download_dir=nltk_data_dir)
-
-
-
-
-
-#nltk_data_dir = "/opt/render/nltk_data"
-#os.makedirs(nltk_data_dir, exist_ok=True)
-
-#nltk.data.path.append(nltk_data_dir)
-
-#nltk.download('punkt')
-#nltk.download('averaged_perceptron_tagger', download_dir= nltk_data_dir)
-#nltk.download('punkt',download_dir= nltk_data_dir)
+# download required resources (quietly)
+nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
+nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
 nltk.download('punkt_tag', download_dir=nltk_data_dir)
+# preload stopwords to avoid runtime lookups
+STOPWORDS = set(stopwords.words('english'))
 
-#Text Vectorization
-tfIdf = pickle.load(open('vectorizer.pkl','rb'))
+# load vectorizer and model using absolute paths
+base_dir = os.path.dirname(__file__)
+tfIdf = pickle.load(open(os.path.join(base_dir, 'vectorizer.pkl'), 'rb'))
 
-
-# Load the trained model
-model_path = 'model.pkl'
+model_path = os.path.join(base_dir, 'model.pkl')
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
@@ -49,8 +37,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
- prediction = None
- if request.method == "POST":
+    prediction = None
+    if request.method == "POST":
         message = request.form.get("message", "").strip()
         if not message:
             prediction = "Error: Message cannot be empty."
@@ -59,7 +47,7 @@ def home():
             features = tfIdf.transform([cleaned])
             result = model.predict(features)[0]
             prediction = "Spam" if result == 1 else "Not Spam"
- return render_template('index.html',prediction=prediction)
+    return render_template('index.html', prediction=prediction)
 
 def transform_text(text):
     text = text.lower()
@@ -74,7 +62,7 @@ def transform_text(text):
     y.clear()
 
     for i in text:
-        if i not in stopwords.words('english') and i not in string.punctuation:
+        if i not in STOPWORDS and i not in string.punctuation:
             y.append(i)
 
     text = y[:]
@@ -84,9 +72,6 @@ def transform_text(text):
         y.append(ps.stem(i))
 
     return " ".join(y)
-
-
-
 
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
@@ -106,5 +91,3 @@ def api_predict():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-    

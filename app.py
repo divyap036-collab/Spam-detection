@@ -11,7 +11,7 @@ import string
                      
 ps = PorterStemmer() 
 
-//new lines
+#new lines
 
 
 

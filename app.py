@@ -34,7 +34,7 @@ nltk.download('stopwords', download_dir=nltk_data_dir)
 #nltk.download('punkt')
 #nltk.download('averaged_perceptron_tagger', download_dir= nltk_data_dir)
 #nltk.download('punkt',download_dir= nltk_data_dir)
-#nltk.download('punkt_tag', download_dir=nltk_data_dir)
+nltk.download('punkt_tag', download_dir=nltk_data_dir)
 
 #Text Vectorization
 tfIdf = pickle.load(open('vectorizer.pkl','rb'))

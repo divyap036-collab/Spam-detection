@@ -21,7 +21,7 @@ if nltk_data_dir not in nltk.data.path:
 # download required resources (quietly)
 nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
 nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
-nltk.download('punkt_tag', download_dir=nltk_data_dir)
+#nltk.download('punkt_tag', download_dir=nltk_data_dir)
 # preload stopwords to avoid runtime lookups
 STOPWORDS = set(stopwords.words('english'))
 
